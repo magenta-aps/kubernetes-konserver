@@ -19,4 +19,4 @@ COPY konserver/ konserver/
 
 # https://github.com/nolar/kopf/issues/92
 ENV PYTHONPATH=.
-ENTRYPOINT ["kopf", "run", "--verbose", "--namespace='*'", "-m", "konserver.main"]
+ENTRYPOINT ["kopf", "run", "--verbose", "-m", "konserver.main"]

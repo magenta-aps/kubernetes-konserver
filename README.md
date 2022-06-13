@@ -10,7 +10,7 @@ on dependencies defined in annotations.
 Install the controller using helm:
 ```shell
 helm repo add magenta https://chartmuseum.magentahosted.dk
-helm upgrade --install konserver magenta/konserver --namespace konserver
+helm upgrade --install konserver magenta/kubernetes-konserver --namespace konserver
 ```
 
 Set the `conservable` annotation on objects to protect from deletion. This

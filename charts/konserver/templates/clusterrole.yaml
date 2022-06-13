@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
+---
+# https://kopf.readthedocs.io/en/stable/deployment/
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "konserver.serviceAccountName" . }}
+  labels:
+    {{ include "konserver.labels" . | nindent 4 }}
+rules:
+  # Kopf Framework: knowing which other operators are running (i.e. peering).
+  - apiGroups: [kopf.dev]
+    resources: [clusterkopfpeerings]
+    verbs: [list, watch, patch, get]
+
+  # Kopf Framework: runtime observation of namespaces & CRDs (addition/deletion).
+  - apiGroups: [apiextensions.k8s.io]
+    resources: [customresourcedefinitions]
+    verbs: [list, watch]
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [list, watch]
+
+  # Kopf Framework: admission webhook configuration management.
+  - apiGroups: [admissionregistration.k8s.io/v1, admissionregistration.k8s.io/v1beta1]
+    resources: [validatingwebhookconfigurations, mutatingwebhookconfigurations]
+    verbs: [create, patch]
+{{- end }}
