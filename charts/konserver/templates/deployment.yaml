@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
+---
+# https://kopf.readthedocs.io/en/stable/deployment/
+{{- if .Values.rbac.create }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "konserver.fullname" . }}
+  labels:
+    {{- include "konserver.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "konserver.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "konserver.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          {{ $version := default .Chart.AppVersion .Values.image.tag }}
+          image: "{{ .Values.image.repository }}:{{ ternary "latest" $version (eq $version "0.0.0") }}"
+          args: ["--namespace", "{{ .Release.Namespace }}"]
+          env:
+            {{- if .Values.watchedResources }}
+            - name: watched_resources
+              value: {{ .Values.watchedResources | toJson | squote }}
+            {{ end }}
+      serviceAccountName: {{ include "konserver.serviceAccountName" . }}
+{{- end }}

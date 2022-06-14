@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Magenta ApS
+# SPDX-License-Identifier: MPL-2.0
+---
+# https://kopf.readthedocs.io/en/stable/deployment/
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "konserver.serviceAccountName" . }}
+  labels:
+    {{ include "konserver.labels" . | nindent 4 }}
+roleRef:
+  kind: Role
+  name: {{ include "konserver.serviceAccountName" . }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "konserver.serviceAccountName" . }}
+{{- end }}

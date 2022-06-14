@@ -1,0 +1,62 @@
+image:
+  repository: magentaaps/kubernetes-konserver
+  # if no tag is given, the chart's appVersion is used
+  tag: null
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  # Disables creation of rbac resources
+  create: true
+
+podAnnotations: {}
+
+watchedResources:
+  # Default to all namespaced core v1 resources
+  - group: ""
+    version: v1
+    name: configmaps
+  - group: ""
+    version: v1
+    name: endpoints
+  - group: ""
+    version: v1
+    name: events
+  - group: ""
+    version: v1
+    name: limitranges
+  - group: ""
+    version: v1
+    name: namespaces
+  - group: ""
+    version: v1
+    name: persistentvolumeclaims
+  - group: ""
+    version: v1
+    name: pods
+  - group: ""
+    version: v1
+    name: podtemplates
+  - group: ""
+    version: v1
+    name: replicationcontrollers
+  - group: ""
+    version: v1
+    name: resourcequotas
+  - group: ""
+    version: v1
+    name: secrets
+  - group: ""
+    version: v1
+    name: serviceaccounts
+  - group: ""
+    version: v1
+    name: services
